@@ -82,7 +82,7 @@ public class FieldCentricDrive extends HWMap {
             gamepadY *= STRAFE_TOGGLE_FACTOR;
         }
 
-        // gamepadRot is negated because in math, a counterclockwise rotation is positive
+        // gamepadRot negated because in math, a counterclockwise rotation is positive
         // (think unit circle), but on the controller, we expect the robot to rotate clockwise when
         // we push the stick to the right. Pushing the stick to the right outputs a positive value.
         double turn = -gamepadRot * rotationEffectivness;
