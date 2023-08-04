@@ -1,4 +1,3 @@
-package org.firstinspires.ftc.teamcode.Auto;/*
 package org.firstinspires.ftc.teamcode.Auto;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -24,8 +23,6 @@ import java.util.ArrayList;
 public class CSTest extends LinearOpMode {
     private OpenCvCamera camera;
     private Detection detection;
-    private BNO055IMU imu;
-    public static double imuAngle;
     static final double FEET_PER_METER = 3.28084;
     // Lens intrinsics
     // UNITS ARE PIXELS
@@ -57,8 +54,10 @@ public class CSTest extends LinearOpMode {
     private double strafeVal = 0.0001;
     private double colorCorrection;
 
-    */
-/* Auto Constant Variables: **//*
+
+    /**
+     * Auto Constant Variables:
+     **/
 
     private double startX = 0; // Start pos X
     private double startY = 0; // Start pos Y
@@ -69,8 +68,9 @@ public class CSTest extends LinearOpMode {
     private double cycleJCTX = 48.0; // Cycle junction deposit X value
     private double cycleJCTY = 12.0; // Cycle junction deposit XY value
 
-    */
-/** Robot Tuning Variables: **//*
+    /**
+     * Robot Tuning Variables:
+     **/
 
     private double startXOff = -0.5; // Start pos X offset
     private double startYOff = 0.0; // Start pos Y offset
@@ -82,30 +82,30 @@ public class CSTest extends LinearOpMode {
     private double cycleYOff = 4.0; // Cycle junction X offset
 
     //TODO: Field Tuning Variables:
-    private double autoDelay = 	0.0	; //TODO: Delay before auto starts
-    private double F_preXOff = 	-0.5	; //TODO: Field Preload junction X offset
-    private double F_preYOff =	0.0	; //TODO: Field Preload junction Y offset
+    private double autoDelay = 0.0; //TODO: Delay before auto starts
+    private double F_preXOff = -0.5; //TODO: Field Preload junction X offset
+    private double F_preYOff = 0.0; //TODO: Field Preload junction Y offset
 
-    private double F_stackXOff1 = 	0.55	; //TODO: Stack X offset Cycle 1
-    private double F_stackYOff1 = 	0.0	; //TODO: Stack Y offset Cycle 1
-    private double F_stackAngOff1 = 	0.0	; //TODO: Stack Angle offset Cycle 1
-    private double F_cycleXOff1 = 	-0.0	; //TODO: Field cycle junction X offset Cycle 1
-    private double F_cycleYOff1 = 	-0.5	; //TODO: Field cycle junction Y offset Cycle 1
-    private double F_cycleAngOff1 = 	0.0	; //TODO: cycle Angle offset Cycle 1
+    private double F_stackXOff1 = 0.55; //TODO: Stack X offset Cycle 1
+    private double F_stackYOff1 = 0.0; //TODO: Stack Y offset Cycle 1
+    private double F_stackAngOff1 = 0.0; //TODO: Stack Angle offset Cycle 1
+    private double F_cycleXOff1 = -0.0; //TODO: Field cycle junction X offset Cycle 1
+    private double F_cycleYOff1 = -0.5; //TODO: Field cycle junction Y offset Cycle 1
+    private double F_cycleAngOff1 = 0.0; //TODO: cycle Angle offset Cycle 1
 
-    private double F_stackXOff2 = 	0.55	; //TODO: Stack X offset Cycle 2
-    private double F_stackYOff2 = 	0.0	; //TODO: Stack Y offset Cycle 2
-    private double F_stackAngOff2 = 	0.0	; //TODO: Stack Angle offset Cycle 2
-    private double F_cycleXOff2 = 	-0.0	; //TODO: Field cycle junction X offset Cycle 2
-    private double F_cycleYOff2 = 	-0.5	; //TODO: Field cycle junction Y offset Cycle 2
-    private double F_cycleAngOff2 = 	0.0	; //TODO: cycle Angle offset Cycle 2
+    private double F_stackXOff2 = 0.55; //TODO: Stack X offset Cycle 2
+    private double F_stackYOff2 = 0.0; //TODO: Stack Y offset Cycle 2
+    private double F_stackAngOff2 = 0.0; //TODO: Stack Angle offset Cycle 2
+    private double F_cycleXOff2 = -0.0; //TODO: Field cycle junction X offset Cycle 2
+    private double F_cycleYOff2 = -0.5; //TODO: Field cycle junction Y offset Cycle 2
+    private double F_cycleAngOff2 = 0.0; //TODO: cycle Angle offset Cycle 2
 
-    private double F_stackXOff3 = 	0.55	; //TODO: Stack X offset Cycle 3
-    private double F_stackYOff3 = 	0.0	; //TODO: Stack Y offset Cycle 3
-    private double F_stackAngOff3 = 	0.0	; //TODO: Stack Angle offset Cycle 3
-    private double F_cycleXOff3 = 	0.0	; //TODO: Field cycle junction X offset Cycle 3
-    private double F_cycleYOff3 = 	-0.5	; //TODO: Field cycle junction Y offset Cycle 3
-    private double F_cycleAngOff3 = 	0.0	; //TODO: cycle Angle offset Cycle 3
+    private double F_stackXOff3 = 0.55; //TODO: Stack X offset Cycle 3
+    private double F_stackYOff3 = 0.0; //TODO: Stack Y offset Cycle 3
+    private double F_stackAngOff3 = 0.0; //TODO: Stack Angle offset Cycle 3
+    private double F_cycleXOff3 = 0.0; //TODO: Field cycle junction X offset Cycle 3
+    private double F_cycleYOff3 = -0.5; //TODO: Field cycle junction Y offset Cycle 3
+    private double F_cycleAngOff3 = 0.0; //TODO: cycle Angle offset Cycle 3
 
     @Override
     public void runOpMode() {
@@ -114,9 +114,6 @@ public class CSTest extends LinearOpMode {
         retractOdo = new RetractOdo(telemetry, hardwareMap);
         colorSensorMech = new ColorSensorMech(telemetry, hardwareMap);
         timer = new ElapsedTime();
-        imu = this.hardwareMap.get(BNO055IMU.class, "imu");
-
-        initializeIMU();
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
@@ -127,6 +124,7 @@ public class CSTest extends LinearOpMode {
             public void onOpened() {
                 camera.startStreaming(800, 448, OpenCvCameraRotation.UPRIGHT);
             }
+
             @Override
             public void onError(int errorCode) {
             }
@@ -180,14 +178,13 @@ public class CSTest extends LinearOpMode {
             telemetry.update();
             sleep(20);
         }
-        */
-/*
+
+        /*
          * The START command just came in: now work off the latest snapshot acquired
          * during the init loop.
-         *//*
+         */
 
-        */
-/* Update the telemetry *//*
+        /* Update the telemetry */
 
         if (tagOfInterest != null) {
             telemetry.addLine("Tag snapshot:\n");
@@ -197,8 +194,8 @@ public class CSTest extends LinearOpMode {
             telemetry.addLine("No tag snapshot available, it was never sighted during the init loop :(");
             telemetry.update();
         }
-        */
-/* Start Loop *//*
+
+        /* Start Loop */
 
         double numericalTag = 0;
         if (tagOfInterest != null) {
@@ -209,7 +206,7 @@ public class CSTest extends LinearOpMode {
             } else if (tagOfInterest.id == RIGHT) {
                 numericalTag = tagOfInterest.id - 2;
             }
-        } else{
+        } else {
             numericalTag = -1;
         }
 
@@ -249,7 +246,7 @@ public class CSTest extends LinearOpMode {
                 .build();
         drive.followTrajectorySequenceAsync(ColorTest);
 
-        */
+
 /*startHeading = Math.toRadians(0);
         drive.setPoseEstimate(new Pose2d(startX, startY, startHeading));
         drive.setExternalHeading(startHeading);
@@ -260,17 +257,14 @@ public class CSTest extends LinearOpMode {
                 .forward(4)
                 .build();
         drive.followTrajectorySequenceAsync(ColorTest);
-*//*
+*/
 
-        while(opModeIsActive()){
+        while (opModeIsActive()) {
             idle();
             for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
                 module.clearBulkCache();
             }
-            //coneTransporter.retractOdometryServos();
-            imuAngle = readFromIMU();
             linearSLides.loop();
-            //telemetry.update();
             drive.update();
             //if(imuTimer.time() - lastIMUCall >= .1 && drive.getPoseVelocity().vec().norm() < 5.0) {
             //telemetry.addData("IMU Angle", IMUHeading.imuAngle);
@@ -279,25 +273,14 @@ public class CSTest extends LinearOpMode {
             //}
         }
     }
+
     void tagToTelemetry(AprilTagDetection detection) {
         telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
-        telemetry.addLine(String.format("Translation X: %.2f feet", detection.pose.x*FEET_PER_METER));
-        telemetry.addLine(String.format("Translation Y: %.2f feet", detection.pose.y*FEET_PER_METER));
-        telemetry.addLine(String.format("Translation Z: %.2f feet", detection.pose.z*FEET_PER_METER));
-        telemetry.addLine(String.format("Rotation Yaw: %.2f degrees", Math.toDegrees(detection.pose.yaw)));
-        telemetry.addLine(String.format("Rotation Pitch: %.2f degrees", Math.toDegrees(detection.pose.pitch)));
-        telemetry.addLine(String.format("Rotation Roll: %.2f degrees", Math.toDegrees(detection.pose.roll)));
+        telemetry.addLine(String.format("Translation X: %.2f feet", detection.pose.x * FEET_PER_METER));
+        telemetry.addLine(String.format("Translation Y: %.2f feet", detection.pose.y * FEET_PER_METER));
+        telemetry.addLine(String.format("Translation Z: %.2f feet", detection.pose.z * FEET_PER_METER));
+        //telemetry.addLine(String.format("Rotation Yaw: %.2f degrees", Math.toDegrees(detection.pose.yaw)));
+        //telemetry.addLine(String.format("Rotation Pitch: %.2f degrees", Math.toDegrees(detection.pose.pitch)));
+        //telemetry.addLine(String.format("Rotation Roll: %.2f degrees", Math.toDegrees(detection.pose.roll)));
     }
-    public double readFromIMU() {
-        return drive.getRawExternalHeading();
-    }
-    public void initializeIMU() {
-        // don't touch please
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
-        imu.initialize(parameters);
-    }
-
-
-
-}*/
+}

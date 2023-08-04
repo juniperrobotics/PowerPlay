@@ -52,16 +52,14 @@ public class HWMap {
         this.telemetry = telemetry;
 
         //Mapping Motors
-        leftBackMotor = hardwareMap.get(DcMotorEx.class, "LB");
-        leftFrontMotor = hardwareMap.get(DcMotorEx.class, "LF");
-        rightBackMotor = hardwareMap.get(DcMotorEx.class, "RB");
-        rightFrontMotor = hardwareMap.get(DcMotorEx.class, "RF");
+        leftBackMotor = hardwareMap.get(DcMotorEx.class, "LB"); //CH Port 3
+        leftFrontMotor = hardwareMap.get(DcMotorEx.class, "LF"); //CH Port 1
+        rightBackMotor = hardwareMap.get(DcMotorEx.class, "RB"); //CH Port 2
+        rightFrontMotor = hardwareMap.get(DcMotorEx.class, "RF"); //CH Port 0
 
-        linearSlides = hardwareMap.get(DcMotorEx.class, "LS");
+        linearSlides = hardwareMap.get(DcMotorEx.class, "LS"); //EH port 0?
 
-        //IMU
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        initializeIMU();
+        //IMU mapped and initialized in SampleMecanumDrive - CH 12C BUS 0
 
         //Mapping Servos
         gripper = hardwareMap.get(Servo.class, "gripper");
@@ -101,7 +99,7 @@ public class HWMap {
         return imuAngle;
     }
 
-    public void initializeIMU() {
+    public static void initializeIMU() {
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
         imu.initialize(parameters);
