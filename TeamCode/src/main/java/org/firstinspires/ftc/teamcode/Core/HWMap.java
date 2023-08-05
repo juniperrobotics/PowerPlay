@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Core;
 
+import android.graphics.drawable.GradientDrawable;
+
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -9,6 +11,10 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 /**
  * This class contains all the hardware components that are programmed on our robot and are mapped to the robot as well.
@@ -94,9 +100,9 @@ public class HWMap {
         linearSlides.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    public static double readFromIMU() {
-        imuAngle = -imu.getAngularOrientation().firstAngle;
-        return imuAngle;
+    public static Orientation readFromIMU() {
+        Orientation imuOrientation = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+        return imuOrientation;
     }
 
     public static void initializeIMU() {

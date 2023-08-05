@@ -284,7 +284,7 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     @Override
     public double getRawExternalHeading() {
-        return HWMap.readFromIMU();
+        return HWMap.readFromIMU().firstAngle;
     }
 
 /*    @Override

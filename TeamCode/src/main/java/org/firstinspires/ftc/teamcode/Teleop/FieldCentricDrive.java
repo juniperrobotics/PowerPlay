@@ -13,7 +13,10 @@ public class FieldCentricDrive extends HWMap {
 
     public double STRAFE_TOGGLE_FACTOR = 0.5;
     public double ROTATION_TOGGLE_FACTOR = 0.5;
-    public double imuMeasure;
+    public Orientation imuMeasure;
+    public double firstAngle;
+    public double secondAngle;
+    public double thirdAngle;
     public double leftBackPower;
     public double rightBackPower;
     public double rightFrontPower;
@@ -33,25 +36,7 @@ public class FieldCentricDrive extends HWMap {
         super(telemetry, hardwareMap);
     }
 
-    public void checkifrobotnottipping() {
-        if (globalPitchAngle <= 65) {
-            //Here it checks if the tip angle exceeds 8 degrees
-            rightFrontMotor.setDirection(DcMotor.Direction.FORWARD);
-            leftFrontMotor.setDirection(DcMotor.Direction.REVERSE);
-            leftFrontMotor.setPower(1.0);
-            rightFrontMotor.setPower(1.0);
-        } else if (globalPitchAngle >= 90) {
-            rightBackMotor.setDirection(DcMotor.Direction.REVERSE);
-            leftBackMotor.setDirection(DcMotor.Direction.FORWARD);
-            rightBackMotor.setPower(1.0);
-            leftBackMotor.setPower(1.0);
-        } else {
-            rightBackMotor.setDirection(DcMotor.Direction.FORWARD);
-            rightFrontMotor.setDirection(DcMotor.Direction.FORWARD);
-            leftFrontMotor.setDirection(DcMotor.Direction.REVERSE);
-            leftBackMotor.setDirection(DcMotor.Direction.REVERSE);
-        }
-    }
+
 
     public void addTelemetry(){
         telemetry.addData("Left Front", leftFrontPower);
@@ -93,8 +78,11 @@ public class FieldCentricDrive extends HWMap {
 //        telemetry.addData("controllerVector[1]: ", controllerVector[1]);
 
         imuMeasure = readFromIMU();
+        firstAngle = imuMeasure.firstAngle;
+        secondAngle = imuMeasure.secondAngle;
+        thirdAngle = imuMeasure.thirdAngle;
 
-        double[] rotatedVector = rotate(controllerVector, imuMeasure);
+        double[] rotatedVector = rotate(controllerVector, firstAngle);
         double rotatedX = rotatedVector[0];
         double rotatedY = rotatedVector[1];
 //        telemetry.addData("rotatedX: ", rotatedX);
