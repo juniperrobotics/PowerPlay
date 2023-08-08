@@ -45,7 +45,7 @@ public class TeleopAccelerationControl extends LinearOpMode {
             }
 
         }
-
+        //Accel Controls
         telemetry.update();
         linearSLides.init();
         TIP tip = TIP.NOT_TIPPING;
