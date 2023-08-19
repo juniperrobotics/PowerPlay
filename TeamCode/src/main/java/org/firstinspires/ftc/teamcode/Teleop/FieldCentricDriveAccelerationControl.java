@@ -26,12 +26,12 @@ public class FieldCentricDriveAccelerationControl extends HWMap {
     private double VectorY = 0.0;
     private double VectorRot = 0.0;
     private ElapsedTime accelTimer = new ElapsedTime();
-    private boolean  firstCycle = true;
+    private boolean firstCycle = true;
 
     // This variable will store the max accel
-    private final double maxAccelDecelXY = 0.3; // VARIABLE NEEDS TO BE CHANGED: As our robot's motor speeds range from 0 to 1 the robot will accel at (maxAccelDecelXY) of the max speed per second. This is for moving forwards and backwards
-    private final double maxAccelDecelRot = 0.5; // VARIABLE NEEDS TO BE CHANGED: As our robot's motor speeds range from 0 to 1 the robot will accel at (maxAccelDecelRot) of the max speed per second. This is for turning
-    public void addTelemetry(){
+    private double maxAccelDecelXY = 0.65; // VARIABLE NEEDS TO BE CHANGED: As our robot's motor speeds range from 0 to 1 the robot will accel at (maxAccelDecelXY) of the max speed per second. This is for moving forwards and backwards
+    private double maxAccelDecelRot = 0.8; // VARIABLE NEEDS TO BE CHANGED: As our robot's motor speeds range from 0 to 1 the robot will accel at (maxAccelDecelRot) of the max speed per second. This is for turning
+    public void addTelemetry() {
         telemetry.addData("Left Front", leftFrontPower);
         telemetry.addData("Right Front", rightFrontPower);
         telemetry.addData("Left Back", leftBackPower);
@@ -40,7 +40,10 @@ public class FieldCentricDriveAccelerationControl extends HWMap {
         telemetry.addData("Right Front MAH", rightFrontMotor.getCurrent(CurrentUnit.MILLIAMPS));
         telemetry.addData("Left Back MAH", leftBackMotor.getCurrent(CurrentUnit.MILLIAMPS));
         telemetry.addData("Right Back MAH", rightBackMotor.getCurrent(CurrentUnit.MILLIAMPS));
+        telemetry.addData("MaxAccelXY", maxAccelDecelXY);
+        telemetry.addData("MaxAccelROT", maxAccelDecelRot);
     }
+
     public FieldCentricDriveAccelerationControl(Telemetry telemetry, HardwareMap hardwareMap) {
         super(telemetry, hardwareMap);
     }
@@ -53,24 +56,24 @@ public class FieldCentricDriveAccelerationControl extends HWMap {
             gamepadX *= STRAFE_TOGGLE_FACTOR;
             gamepadY *= STRAFE_TOGGLE_FACTOR;
         }
-        if(accelTimer.time(TimeUnit.SECONDS) >= 1 || (VectorX == 0 && VectorY == 0 && VectorRot == 0 && firstCycle)){
-            //This will store the target speed which is adjusted based on acceleration and is provided by the controller inputs
-            double targetSpeedX = gamepadX * xyEffectivness;
-            double targetSpeedY = gamepadY * xyEffectivness;
-            double targetSpeedRot = -gamepadRot * rotationEffectivness; // Negated because the joystick works in the other direction
-            // Calculate acceleration and deceleration values for each axis
-            double accelX = calculateAccelDecel(VectorX, targetSpeedX, maxAccelDecelXY);
-            double accelY = calculateAccelDecel(VectorY, targetSpeedY, maxAccelDecelXY);
-            double accelRot = calculateAccelDecel(VectorRot, targetSpeedRot, maxAccelDecelRot);
 
-            // Update current speeds based on acceleration and deceleration values
+        //This will store the target speed which is adjusted based on acceleration and is provided by the controller inputs
+        double targetSpeedX = gamepadX * xyEffectivness;
+        double targetSpeedY = gamepadY * xyEffectivness;
+        double targetSpeedRot = -gamepadRot * rotationEffectivness; // Negated because the joystick works in the other direction
+        maxAccelDecelXY = 0.0065;
+        maxAccelDecelRot = 0.008;
+        maxAccelDecelXY *= accelTimer.time(TimeUnit.MILLISECONDS);
+        maxAccelDecelRot *= accelTimer.time(TimeUnit.MILLISECONDS);
+        // Calculate acceleration and deceleration values for each axis
+        double accelX = calculateAccelDecel(VectorX, targetSpeedX, maxAccelDecelXY);
+        double accelY = calculateAccelDecel(VectorY, targetSpeedY, maxAccelDecelXY);
+        double accelRot = calculateAccelDecel(VectorRot, targetSpeedRot, maxAccelDecelRot);
+
+        // This is the refresh rate for the velocity.
             VectorX += accelX;
             VectorY += accelY;
             VectorRot += accelRot;
-            firstCycle = false;
-            accelTimer.reset();
-        }
-
 
 
         //Final calculations for motor speed and direction
@@ -108,6 +111,7 @@ public class FieldCentricDriveAccelerationControl extends HWMap {
         leftFrontMotor.setPower(leftFrontPower);
         rightBackMotor.setPower(rightBackPower);
         rightFrontMotor.setPower(rightFrontPower);
+        accelTimer.reset();
     }
 
     private double calculateAccelDecel(double currentSpeed, double targetSpeed, double maxRate) {
@@ -121,6 +125,14 @@ public class FieldCentricDriveAccelerationControl extends HWMap {
 
         // Apply the direction to the acceleration
         return sign * accelDecel;
+    }
+    void accelLimitXY(double targetSpeed, double currentSpeed, double duration){
+        double speedDifference = targetSpeed - currentSpeed;
+        maxAccelDecelXY = speedDifference/2;
+    }
+    void accelLimitRot(double targetSpeed, double currentSpeed, double duration){
+        double speedDifference = targetSpeed - currentSpeed;
+        maxAccelDecelRot = speedDifference/2;
     }
     public static double[] rotate(double[] vector, double angle) {
         final double[] newVector = {0, 0};
