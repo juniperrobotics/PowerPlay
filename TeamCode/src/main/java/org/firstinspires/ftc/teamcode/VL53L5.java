@@ -7,6 +7,11 @@ import com.qualcomm.robotcore.hardware.configuration.annotations.DevicePropertie
 import com.qualcomm.robotcore.hardware.configuration.annotations.I2cDeviceType;
 import com.qualcomm.robotcore.util.TypeConversion;
 
+/**
+ * Guide to write driver: https://github.com/FIRST-Tech-Challenge/ftcrobotcontroller/wiki/Writing-an-I2C-Driver
+ * Example rev distance sensor: https://github.com/REVrobotics/2m-Distance-Sensor/blob/master/Source/src/main/java/com/revrobotics/Rev2mDistanceSensor.java
+ */
+
 @I2cDeviceType
 @DeviceProperties(name = "VL53L5 ToF Sensor", xmlTag = "VL53L5")
 public class VL53L5 extends I2cDeviceSynchDevice<I2cDeviceSynch> {
@@ -53,18 +58,6 @@ public class VL53L5 extends I2cDeviceSynchDevice<I2cDeviceSynch> {
         }
     }
 
-    /*
-    protected void setOptimalReadWindow()
-    {
-        // Sensor registers are read repeatedly and stored in a register. This method specifies the
-        // registers and repeat read mode
-        I2cDeviceSynch.ReadWindow readWindow = new I2cDeviceSynch.ReadWindow(
-                Register.FIRST.bVal,
-                Register.LAST.bVal - Register.FIRST.bVal + 1,
-                I2cDeviceSynch.ReadMode.REPEAT);
-        this.deviceClient.setReadWindow(readWindow);
-    }
-     */
 
     protected short read(Register reg){
 

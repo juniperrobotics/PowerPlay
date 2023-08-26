@@ -4,10 +4,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 public class Vl53L5_Runner extends LinearOpMode {
 
-    private VL53L5 tempSensor;
+    private VL53L5 sensor;
 
     public void runOpMode() throws InterruptedException {
-        tempSensor = hardwareMap.get(VL53L5.class, "ToF Sensor");
+        sensor = hardwareMap.get(VL53L5.class, "ToF Sensor");
     }
 
 }
