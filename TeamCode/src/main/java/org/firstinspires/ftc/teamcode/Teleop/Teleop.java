@@ -164,10 +164,7 @@ public class Teleop extends LinearOpMode {
                     linearSLides.setGripperPosition(1.0);
                 }
 
-//                tipAngle.activateTip(75,105);
-                telemetry.addData("first angle: ", fieldCentricDrive.firstAngle);
-                telemetry.addData("second angle: ", fieldCentricDrive.secondAngle);
-                telemetry.addData("third angle: ", fieldCentricDrive.thirdAngle);
+                tipAngle.activateTip(75,105);
                 //fieldCentricDrive.addTelemetry();
                 linearSLides.loop();
                 linearSLides.zeroSlides();

@@ -63,22 +63,23 @@ public class HWMap {
         rightBackMotor = hardwareMap.get(DcMotorEx.class, "RB"); //CH Port 2
         rightFrontMotor = hardwareMap.get(DcMotorEx.class, "RF"); //CH Port 0
 
-        linearSlides = hardwareMap.get(DcMotorEx.class, "LS"); //EH port 0?
+        linearSlides = hardwareMap.get(DcMotorEx.class, "LS"); //EH port 2
 
         //IMU mapped and initialized in SampleMecanumDrive - CH 12C BUS 0
 
         //Mapping Servos
-        gripper = hardwareMap.get(Servo.class, "gripper");
+        gripper = hardwareMap.get(Servo.class, "gripper"); //EH port 5
 
-        leftServo = hardwareMap.get(Servo.class, "LServo");
-        rightServo = hardwareMap.get(Servo.class, "RServo");
-        frontServo = hardwareMap.get(Servo.class, "FServo");
+        leftServo = hardwareMap.get(Servo.class, "LServo"); //EH port 0
+        rightServo = hardwareMap.get(Servo.class, "RServo"); //EH port 3;
+        frontServo = hardwareMap.get(Servo.class, "FServo"); //EH port 1;
 
         //Mapping Sensors
         gripperCS = hardwareMap.get(ColorSensor.class, "gripperCS");
+        /*
         leftCS = hardwareMap.get(ColorSensor.class, "leftCS");
         rightCS = hardwareMap.get(ColorSensor.class, "rightCS");
-        middleCS = hardwareMap.get(ColorSensor.class, "middleCS");
+        middleCS = hardwareMap.get(ColorSensor.class, "middleCS");*/
 
 
         //Set Motor Direction
@@ -100,9 +101,9 @@ public class HWMap {
         linearSlides.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    public static Orientation readFromIMU() {
-        Orientation imuOrientation = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
-        return imuOrientation;
+    public static double readFromIMU() {
+        imuAngle = -imu.getAngularOrientation().firstAngle;
+        return imuAngle;
     }
 
     public static void initializeIMU() {

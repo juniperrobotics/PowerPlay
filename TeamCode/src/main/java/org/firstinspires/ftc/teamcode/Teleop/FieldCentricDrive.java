@@ -13,7 +13,7 @@ public class FieldCentricDrive extends HWMap {
 
     public double STRAFE_TOGGLE_FACTOR = 0.5;
     public double ROTATION_TOGGLE_FACTOR = 0.5;
-    public Orientation imuMeasure;
+    public double imuMeasure;
     public double firstAngle;
     public double secondAngle;
     public double thirdAngle;
@@ -78,11 +78,8 @@ public class FieldCentricDrive extends HWMap {
 //        telemetry.addData("controllerVector[1]: ", controllerVector[1]);
 
         imuMeasure = readFromIMU();
-        firstAngle = imuMeasure.firstAngle;
-        secondAngle = imuMeasure.secondAngle;
-        thirdAngle = imuMeasure.thirdAngle;
 
-        double[] rotatedVector = rotate(controllerVector, firstAngle);
+        double[] rotatedVector = rotate(controllerVector, imuMeasure);
         double rotatedX = rotatedVector[0];
         double rotatedY = rotatedVector[1];
 //        telemetry.addData("rotatedX: ", rotatedX);
