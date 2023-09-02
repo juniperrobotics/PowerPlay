@@ -38,19 +38,15 @@ public class TipAngle extends HWMap {
 
     public void activateTip(int degForward, int degBackwards) {
         telemetry.addData("Pitch angle: ", getPitch());
-        if (getPitch() <= degForward && getPitch() >= 10) {
+        if (getPitch() <= degForward) {
             //Here it checks if the tip angle exceeds 8 degrees
             telemetry.addData("-", "tip is activated(TIPPING FORWARD)");
-            rightFrontMotor.setDirection(DcMotor.Direction.FORWARD);
-            leftFrontMotor.setDirection(DcMotor.Direction.FORWARD);
             leftFrontMotor.setPower(1.0);
             rightFrontMotor.setPower(1.0);
         } else if (getPitch() >= degBackwards) {
             telemetry.addData("-", "tip is activated(TIPPING BACKWARD)");
-            rightBackMotor.setDirection(DcMotor.Direction.REVERSE);
-            leftBackMotor.setDirection(DcMotor.Direction.REVERSE);
-            rightBackMotor.setPower(1.0);
-            leftBackMotor.setPower(1.0);
+            rightBackMotor.setPower(-1.0);
+            leftBackMotor.setPower(-1.0);
         } else {
             rightBackMotor.setDirection(DcMotor.Direction.FORWARD);
             rightFrontMotor.setDirection(DcMotor.Direction.FORWARD);

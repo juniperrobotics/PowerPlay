@@ -164,7 +164,7 @@ public class Teleop extends LinearOpMode {
                     linearSLides.setGripperPosition(1.0);
                 }
 
-                tipAngle.activateTip(75,105);
+                tipAngle.activateTip(75,100);
                 //fieldCentricDrive.addTelemetry();
                 linearSLides.loop();
                 linearSLides.zeroSlides();
