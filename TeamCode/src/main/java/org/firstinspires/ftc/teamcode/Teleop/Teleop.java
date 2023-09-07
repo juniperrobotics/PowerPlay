@@ -5,35 +5,36 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Core.Controller;
 import org.firstinspires.ftc.teamcode.Mechanism.LinearSlides;
+import org.firstinspires.ftc.teamcode.Mechanism.TipAngle;
 
 import java.util.Objects;
 
-@TeleOp(name = "Tele-op")
+@TeleOp(name = "Tele-op Tip Angles")
 public class Teleop extends LinearOpMode {
 
     // declare class variables here
     private Controller controller;
     private FieldCentricDrive fieldCentricDrive;
     private LinearSlides linearSLides;
+    private TipAngle tipAngle;
     // Check if B is pressed
     private boolean b_Press = false;
     public int triggerPressCount = 0;
     private boolean stackState = false;
 
-    public enum TIP {
-        TIPPING, NOT_TIPPING, ON_STACKS
-    }
+//    public enum TIP {
+//        TIPPING, NOT_TIPPING, ON_STACKS
+//    }
 
     public void runOpMode() {
         telemetry.clear();
-
 
         try {
             // setup
             controller = new Controller(gamepad1, gamepad2);
             fieldCentricDrive = new FieldCentricDrive(telemetry, hardwareMap);
             linearSLides = new LinearSlides(telemetry, hardwareMap);
-
+            tipAngle = new TipAngle(telemetry, hardwareMap);
 
         } catch (Exception exception) {
             telemetry.addLine("Outside of the while loop:");
@@ -48,7 +49,7 @@ public class Teleop extends LinearOpMode {
 
         telemetry.update();
         linearSLides.init();
-        TIP tip = TIP.NOT_TIPPING;
+        TipAngle.TIP tip = TipAngle.TIP.NOT_TIPPING;
         waitForStart();
         while (opModeIsActive()) {
             try {
@@ -59,7 +60,7 @@ public class Teleop extends LinearOpMode {
                 double gamepadRot;
                 boolean rotationToggle = false;
                 boolean strafeToggle = false;
-                if (tip == TIP.NOT_TIPPING || tip == TIP.ON_STACKS) {
+                if (tip == tip.NOT_TIPPING || tip == tip.ON_STACKS) {
                     if (Math.abs(controller.gamepad1X) > 0.01) {
                         gamepadX = controller.gamepad1X;
                     } else if (Math.abs(controller.gamepad2X) > 0.01) {
@@ -146,7 +147,8 @@ public class Teleop extends LinearOpMode {
                         linearSLides.coneSense();
                         stackState = false;
                     }
-                    tip = TIP.ON_STACKS;
+                    tip = tip.ON_STACKS;
+
                 }
                 linearSLides.coneSense();
 
@@ -162,26 +164,8 @@ public class Teleop extends LinearOpMode {
                     linearSLides.setGripperPosition(1.0);
                 }
 
-                //telemetry.addData("-", "tip is activated");
-
-                //float pitch = fieldCentricDrive.getPitch();
-                //telemetry.addData("Pitch:", pitch);
-                /*if (tip != TIP.ON_STACKS) {
-                    if (pitch <= 75) {
-                        tip = TIP.TIPPING;
-                        fieldCentricDrive.checkifrobotnottipping();
-                    } else if (pitch >= 100) {
-                        tip = TIP.TIPPING;
-                        fieldCentricDrive.checkifrobotnottipping();
-                    } else {
-                        tip = TIP.NOT_TIPPING;
-                        fieldCentricDrive.rightBackMotor.setDirection(DcMotor.Direction.FORWARD);
-                        fieldCentricDrive.rightFrontMotor.setDirection(DcMotor.Direction.FORWARD);
-                        fieldCentricDrive.leftFrontMotor.setDirection(DcMotor.Direction.REVERSE);
-                        fieldCentricDrive.leftBackMotor.setDirection(DcMotor.Direction.REVERSE);
-                    }
-                }*/
-                fieldCentricDrive.addTelemetry();
+                tipAngle.activateTip(75,100);
+                //fieldCentricDrive.addTelemetry();
                 linearSLides.loop();
                 linearSLides.zeroSlides();
 
