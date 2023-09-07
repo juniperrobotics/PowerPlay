@@ -27,12 +27,7 @@ public class TipAngle extends HWMap {
     }
 
     public double getPitch() {
-        /*return imu.getAngularOrientation().thirdAngle;*/
         Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-//        float deltaPitchAngle = angles.thirdAngle - lastAngle.thirdAngle;//This is subtracting roll angle
-//        // It's going to record angles between -180 and 180
-//        globalPitchAngle += deltaPitchAngle;
-//        lastAngle = angles;
         return angles.thirdAngle;
     }
 
